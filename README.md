@@ -1,4 +1,4 @@
-# TP2ML
+# RENEWABLE ENERGY PREDICTION
 
 ## Practical work for Machine Learning class at Ecole des Mines de Saint-Etienne.
 
