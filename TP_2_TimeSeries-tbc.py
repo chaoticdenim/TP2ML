@@ -157,19 +157,8 @@ def model_no_ann(name, data, idx, target):
     with open(fn, 'wb') as f:
         pidump(model, f)
 
-
-    dt = np.concatenate((data[idx['train'], :target], data[idx['train'], target + 1:]), axis=-1)
-    dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
-    dtv = np.concatenate((dt, dv))
-    ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    '''
-    === Put some code here ===
-    '''
-    with open(fn, 'wb') as f:
-        pidump(model, f)
-
-    dt = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
-    graph_comparison([model.predict(dt)], data, idx, target, 1, 0, t_idx='test', step=200)
+    dtest = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
+    graph_comparison([model.predict(dtest)], data, idx, target, 1, 0, t_idx='test', step=200)
 
 
 def data_generator(data, idx, target, w, pred, noise=None, sn=None, batch=32):
