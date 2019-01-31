@@ -144,15 +144,13 @@ def model_no_ann(name, data, idx, target):
 
     model = Sequential()
 
-    model.add(Dense(1000, input_shape=(92,), activation='relu'))
-    model.add(Dense(250, activation='relu'))
-    model.add(Dropout(0.2))
+    model.add(Dense(100, activation='relu', input_shape=(92,))) #92 columns in data
     model.add(Dense(100, activation='relu'))
-    model.add(Dense(10, activation='relu'))
+    model.add(Dense(100, activation='relu'))
     model.add(Dense(1))
     model.compile(optimizer=rmsprop(lr=1e-6), loss=mse, metrics=['mape'])
 
-    model.fit(dt, dtlabel, validation_data=(dv, dvlabel), epochs=50, batch_size=32)
+    model.fit(dt, dtlabel, validation_data=(dv, dvlabel), epochs=100, batch_size=16)
 
     with open(fn, 'wb') as f:
         pidump(model, f)
