@@ -1,7 +1,8 @@
 from os.path import join
 from pickle import dump as pidump, load as piload
-from keras.models import Model, load_model
+from keras.models import Model, load_model, Sequential
 from keras.layers import Input
+from keras.layers.core import Dense, Dropout
 from keras.callbacks import ModelCheckpoint, CSVLogger
 from keras.optimizers import rmsprop
 from keras.losses import mse
@@ -127,6 +128,37 @@ def model_no_ann(name, data, idx, target):
         :param target: int, position of target
     """
     fn = join(model_path, name)
+
+    dt = np.concatenate((data[idx['train'], :target], data[idx['train'], target + 1:]), axis=-1) #exclu la target/label
+    dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1) #same
+    dtv = np.concatenate((dt, dv))
+    ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
+    # model = None
+    '''
+    === Put some code here ===
+    info : 
+        dv : data validation (1752, 92)
+        dt : data training (5256, 92)
+    '''
+    dtlabel = data[idx['train'], target]
+    dvlabel = data[idx['valid'], target]
+
+    model = Sequential()
+
+    model.add(Dense(1000, input_shape=(92,), activation='relu'))
+    model.add(Dense(250, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(100, activation='relu'))
+    model.add(Dense(10, activation='relu'))
+    model.add(Dense(1))
+    model.compile(optimizer=rmsprop(lr=1e-6), loss=mse, metrics=['mape'])
+
+    model.fit(dt, dtlabel, validation_data=(dv, dvlabel), epochs=50, batch_size=32)
+
+    with open(fn, 'wb') as f:
+        pidump(model, f)
+
+
     dt = np.concatenate((data[idx['train'], :target], data[idx['train'], target + 1:]), axis=-1)
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
     dtv = np.concatenate((dt, dv))
@@ -137,6 +169,7 @@ def model_no_ann(name, data, idx, target):
     '''
     with open(fn, 'wb') as f:
         pidump(model, f)
+
     dt = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
     graph_comparison([model.predict(dt)], data, idx, target, 1, 0, t_idx='test', step=200)
 
@@ -298,11 +331,18 @@ def create_model(w, c):
     l_in = Input(shape=(w, c,))
     l_act = l_in
 
+    # === Put some code here ===
+    l_hidden_0 = Dense(200)(l_act)
+    l_out = Dense(1)(l_hidden_0)
+    # === End code ===
+
+
     '''
     === Put some code here ===
     '''
 
     l_out = l_act
+
     return Model(l_in, l_out)
 
 
@@ -320,12 +360,22 @@ if __name__ == '__main__':
     name = '%sTar%d_w%dp%d' % ('Solar' if 'resultsSolar.csv' in data_file_name else 'Wind', target, w, pred)
     if True:
         print('=== No ANN ===')
+
+        # model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
+    if True:
+        trained = '%s_model_0' % name
+        print('=== ANN ===')
+        train_model(w, pred, trained, data, idx, t_pos[target],
+            epoch=400, lr=1e-4, noise=1e-2, sn=sep_noise, batch=128, memory=.2 / 11)
+
+
         model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
     if False:
         print('=== ANN ===')
         trained = '%s_tobespecified' % name
         train_model(w, pred, trained, data, idx, t_pos[target],
                     epoch=400, lr=1e-4, noise=1e-2, sn=sep_noise, batch=128, memory=.2 / 11)
+
         models = [trained,
                   # 'Any other model name',
                   ]
