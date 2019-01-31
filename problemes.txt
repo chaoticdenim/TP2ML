@@ -1,7 +1,0 @@
-1. Redondance : not a problem
-2. Normalisation : un pb!! il faut tjrs normaliser ! => On calcule la moyenne de chaque colonne. trouver les points aberrants et essayer de l'enlever ==> ici on n'en a pas.
-3. Petites variations : 
-4. Indépendance : très lié aux redondances. On n'en a pas trop besoin pour notre exemple.
-5. Format : 
-6. Trous :
-7. Catégorie

@@ -1,7 +1,0 @@
-#!/bin/bash
-BSUB -n 1
-BSUB -Is
-BSUB -gpu "num=1:mode=shared:gmem=2000"
-source activate py3 #comment this line if you want to use python 2
-source /opt/DL/tensorflow/bin/tensorflow-activate
-python myscript.py
