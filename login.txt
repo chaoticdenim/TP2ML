@@ -1,2 +1,0 @@
-LSF_LOGIN:lsfuser22
-LSF_PASSWORD:accept91
