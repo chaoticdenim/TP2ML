@@ -133,7 +133,6 @@ def model_no_ann(name, data, idx, target):
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1) #same
     dtv = np.concatenate((dt, dv))
     ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    # model = None
     '''
     === Put some code here ===
     info : 
@@ -163,7 +162,6 @@ def model_no_ann(name, data, idx, target):
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
     dtv = np.concatenate((dt, dv))
     ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    model = None
     '''
     === Put some code here ===
     '''
@@ -361,8 +359,8 @@ if __name__ == '__main__':
     if True:
         print('=== No ANN ===')
 
-        # model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
-    if True:
+        model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
+    if False:
         trained = '%s_model_0' % name
         print('=== ANN ===')
         train_model(w, pred, trained, data, idx, t_pos[target],
