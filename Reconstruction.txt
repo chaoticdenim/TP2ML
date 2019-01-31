@@ -1,0 +1,50 @@
+Reconstruction d'une donnée à partir des données existantes.
+
+Donc on enlève artificiellement une donnée, elle devient un label, puis on entraine en supervisé un réseau pour reconstruire la donnée à partir de toute les autres données.
+
+2 méthodes : 
+-Réseau de neuronne (Très simple)
+-Regression linéaire (pas logistique car la donnée n'est pas une classe [0-1])
+
+Pb sur les données:
+-Redondance - pas un pb
+-Normalisation - obligatoire
+-Indépendance - pas besoin
+-Format - pb si chiffre et texte
+-Trou
+
+La normalisation n'est mathématiquement pas un pb, mais informatiquement oui : car formatage des données.
+IL FAUT TOUJOURS NORMALISER LES DONNEES:
+ex : -moyenne et /div par le max de chaque colonne => chaque donnée est normalisée entre -1 et 1
+ex : /variance : standardisation entre -10 et 10
+
+Format ville:
+pour les villes on peut transformer les noms en nombre : ex Paris : 1, Bordeau : 2 ...bof, 
+TOUJOURS POUR LES CATEGORIES, il faut passer par un vecteur ONE-HOT : 00010000 8 villes, ville courante : 4
+Vecteur binaire, qui représente la ville courante.
+
+Format Date:
+ONE-HOT, ou relation linéaire entre les dates. Dans un modèle linéaire, les données entrées sont des coeffs linéaire. Si il y a pas de lien entre la premier seconde, 2 fois plus petite que la deuxième seconde. On évite de considérer un lien linéaire entre les données quand il n'y en a pas, cela abime le modèle.
+3 ONE HOT : Jours (1-31), Mois (1-12), Heures(0-23) 
+Pb perte de correlation entre les dates. Pas catastrophique, mais on peux en avoir besoin : technique => rendre continu les données date => embedding.
+Il peut aussi y avoir un pb d'overfitting avec ces ONE HOT de dates.
+
+Préciser le jours de la semaine dans le onehot
+
+Trous : remplacer par les moyennes normalisée <= 0 toujours.
+
+
+La redondance est embettante si c'est notre cible, cad si on a une colonne target qui est déjà dans les données d'apprentissage => risque d'overfitting. C'est le pb dans ce TP
+
+
+Réseau de neuronne : 
+-entrées => toute une ligne (input layer : nombre de colonnes)
+-[batch, nbcolonne(avec onehot)]
+-sortie => target, une seule prédiction : un seul neuronne.
+-[batch, 1]
+	-activation sur le neuronne de sortie : Identité, pas besoin de fct d'act, car la sortie est déjà une valeur réelle 
+
+-couche => couche dense, il faut tester, les fonctions activations dans le réseau, il faut tester, ReLue, sigmoid, Tanh, etc..
+couche de sortie : dense(1) pas de fonction d'activation
+
+/!\ si pas d'act sur les couches cachées, c'est comme si on mettais une seule couche direct connectée entre entrées et sortie => il faut essayer des fonctions d'act.
