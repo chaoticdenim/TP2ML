@@ -128,6 +128,7 @@ def model_no_ann(name, data, idx, target):
         :param target: int, position of target
     """
     fn = join(model_path, name)
+
     dt = np.concatenate((data[idx['train'], :target], data[idx['train'], target + 1:]), axis=-1) #exclu la target/label
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1) #same
     dtv = np.concatenate((dt, dv))
@@ -154,6 +155,18 @@ def model_no_ann(name, data, idx, target):
 
     model.fit(dt, dtlabel, validation_data=(dv, dvlabel), epochs=50, batch_size=32)
 
+    with open(fn, 'wb') as f:
+        pidump(model, f)
+
+
+    dt = np.concatenate((data[idx['train'], :target], data[idx['train'], target + 1:]), axis=-1)
+    dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
+    dtv = np.concatenate((dt, dv))
+    ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
+    model = None
+    '''
+    === Put some code here ===
+    '''
     with open(fn, 'wb') as f:
         pidump(model, f)
 
@@ -317,15 +330,25 @@ def create_model(w, c):
     """
     l_in = Input(shape=(w, c,))
     l_act = l_in
+
     # === Put some code here ===
     l_hidden_0 = Dense(200)(l_act)
     l_out = Dense(1)(l_hidden_0)
     # === End code ===
+
+
+    '''
+    === Put some code here ===
+    '''
+
+    l_out = l_act
+
     return Model(l_in, l_out)
 
 
 data_file_name = join('data', 'resultsSolar.csv')
 # data_file_name = join('data', 'resultsWind.csv')
+
 
 if __name__ == '__main__':
     w, pred, target = 1, 0, 0
@@ -337,12 +360,21 @@ if __name__ == '__main__':
     name = '%sTar%d_w%dp%d' % ('Solar' if 'resultsSolar.csv' in data_file_name else 'Wind', target, w, pred)
     if True:
         print('=== No ANN ===')
+
         # model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
     if True:
         trained = '%s_model_0' % name
         print('=== ANN ===')
         train_model(w, pred, trained, data, idx, t_pos[target],
             epoch=400, lr=1e-4, noise=1e-2, sn=sep_noise, batch=128, memory=.2 / 11)
+
+
+        model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
+    if False:
+        print('=== ANN ===')
+        trained = '%s_tobespecified' % name
+        train_model(w, pred, trained, data, idx, t_pos[target],
+                    epoch=400, lr=1e-4, noise=1e-2, sn=sep_noise, batch=128, memory=.2 / 11)
 
         models = [trained,
                   # 'Any other model name',
