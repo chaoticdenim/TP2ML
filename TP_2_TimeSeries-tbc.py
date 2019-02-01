@@ -5,7 +5,7 @@ from keras.layers import Input, Dense, Flatten
 from keras.callbacks import ModelCheckpoint, CSVLogger
 from keras.optimizers import rmsprop
 from keras.losses import mse
-from sklearn.svm import SVR, LinearSVR
+from sklearn.svm import SVR
 from csv import DictReader
 from matplotlib import pyplot as plt
 import numpy as np
@@ -132,7 +132,7 @@ def model_no_ann(name, data, idx, target):
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
     dtv = np.concatenate((dt, dv))
     ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    model = SVR(epsilon=0.001)
+    model = SVR(epsilon=0.001, gamma='scale')
     model.fit(dtv, ltv)
     '''
     === Put some code here ===
@@ -297,13 +297,13 @@ def create_model(w, c):
     # Returns
         :return: keras model
     """
-    l_in = Input(shape=(w, c,))
-    l_flat = Flatten()(l_in)    
+    l_in = Input(shape=(w, c,))  
     
-    l_hidden_0 = Dense(500, activation='relu')(l_flat)
+    l_hidden_0 = Dense(500, activation='relu')(l_in)
     l_hidden_1 = Dense(100, activation='relu')(l_hidden_0)
     l_hidden_2 = Dense(10, activation='relu')(l_hidden_1)
-    l_out = Dense(1)(l_hidden_2)
+    l_hidden_3 = Dense(1)(l_hidden_2)
+    l_out = Flatten()(l_hidden_3)
 
     return Model(l_in, l_out)
 
