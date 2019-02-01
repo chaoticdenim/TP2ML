@@ -328,9 +328,7 @@ if __name__ == '__main__':
         trained = '%s_tobespecified' % name
         train_model(w, pred, trained, data, idx, t_pos[target],
                     epoch=400, lr=1e-4, noise=1e-2, sn=sep_noise, batch=128, memory=.2 / 11)
-        models = [trained,
-                  # 'Any other model name',
-                  ]
+        models = [trained]                  ]
         pred_grap_nn(models, data, idx, t_pos[target], w, pred, t_idx='train')
         pred_grap_nn(models, data, idx, t_pos[target], w, pred, t_idx='valid')
         pred_grap_nn(models, data, idx, t_pos[target], w, pred)
