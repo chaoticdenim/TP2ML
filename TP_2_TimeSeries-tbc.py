@@ -132,7 +132,7 @@ def model_no_ann(name, data, idx, target):
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
     dtv = np.concatenate((dt, dv))
     ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    model = SVR(epsilon=0.01, gamma='scale')
+    model = SVR(epsilon=0.001)
     model.fit(dtv, ltv)
     '''
     === Put some code here ===
@@ -298,7 +298,7 @@ def create_model(w, c):
         :return: keras model
     """
     l_in = Input(shape=(w, c,))
-    l_flat = Flatten()(l_in)
+    l_flat = Flatten()(l_in)    
     
     l_hidden_0 = Dense(500, activation='relu')(l_flat)
     l_hidden_1 = Dense(100, activation='relu')(l_hidden_0)
@@ -320,10 +320,10 @@ if __name__ == '__main__':
     data = add_ts(data, nts, 2)     # add hour
     data = add_ts(data, nts, 3)     # add day of week
     name = '%sTar%d_w%dp%d' % ('Solar' if 'resultsSolar.csv' in data_file_name else 'Wind', target, w, pred)
-    if True:
+    if False:
         print('=== No ANN ===')
         model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
-    if False:
+    if True:
         print('=== ANN ===')
         trained = '%s_tobespecified' % name
         train_model(w, pred, trained, data, idx, t_pos[target],
