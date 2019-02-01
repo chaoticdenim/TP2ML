@@ -5,6 +5,7 @@ from keras.layers import Input, Dense, Flatten
 from keras.callbacks import ModelCheckpoint, CSVLogger
 from keras.optimizers import rmsprop
 from keras.losses import mse
+from sklearn.svm import SVR, LinearSVR
 from csv import DictReader
 from matplotlib import pyplot as plt
 import numpy as np
@@ -131,14 +132,15 @@ def model_no_ann(name, data, idx, target):
     dv = np.concatenate((data[idx['valid'], :target], data[idx['valid'], target + 1:]), axis=-1)
     dtv = np.concatenate((dt, dv))
     ltv = np.concatenate((data[idx['train'], target], data[idx['valid'], target]))
-    model = None
+    model = SVR(epsilon=0.01, gamma='scale')
+    model.fit(dtv, ltv)
     '''
     === Put some code here ===
     '''
     with open(fn, 'wb') as f:
         pidump(model, f)
-    dt = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
-    graph_comparison([model.predict(dt)], data, idx, target, 1, 0, t_idx='test', step=200)
+    dtest = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
+    graph_comparison([model.predict(dtest)], data, idx, target, 1, 0, t_idx='test', step=200)
 
 
 def data_generator(data, idx, target, w, pred, noise=None, sn=None, batch=32):
@@ -318,10 +320,10 @@ if __name__ == '__main__':
     data = add_ts(data, nts, 2)     # add hour
     data = add_ts(data, nts, 3)     # add day of week
     name = '%sTar%d_w%dp%d' % ('Solar' if 'resultsSolar.csv' in data_file_name else 'Wind', target, w, pred)
-    if False:
+    if True:
         print('=== No ANN ===')
         model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
-    if True:
+    if False:
         print('=== ANN ===')
         trained = '%s_tobespecified' % name
         train_model(w, pred, trained, data, idx, t_pos[target],
