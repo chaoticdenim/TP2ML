@@ -1,9 +1,9 @@
 pandas/
 models/
 __pycache__/
-notes/rapport.fls
-notes/rapport.aux
-notes/rapport.fdb_latexmk
-notes/rapport.log
-notes/rapport.synctex.gz
-notes/rapport.pyg
+rapport/rapport.fls
+rapport/rapport.aux
+rapport/rapport.fdb_latexmk
+rapport/rapport.log
+rapport/rapport.pyg
+rapport/rapport.synctex.gz
