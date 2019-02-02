@@ -135,6 +135,6 @@ def load_select(data_file_name, targets, w, pred):
 
 if __name__ == '__main__':
     w, pred = 1, 0
-    data_file_name = join('data', 'resultsSolar.csv')     # Solar data
+    data_file_name = join('data', 'resultsSoslar.csv')     # Solar data
     # data_file_name = join('data', 'resultsWind.csv')      # Wind data
     nts, data, idx, t_pos, idx_s = load_select(data_file_name, targets, w, pred)
