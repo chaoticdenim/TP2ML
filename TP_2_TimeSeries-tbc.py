@@ -140,6 +140,8 @@ def model_no_ann(name, data, idx, target):
     with open(fn, 'wb') as f:
         pidump(model, f)
     dtest = np.concatenate((data[idx['test'], :target], data[idx['test'], target + 1:]), axis=-1)
+    print("=====================Score : =====================")
+    print(model.score(dtest, model.predict(dtest)))
     graph_comparison([model.predict(dtest)], data, idx, target, 1, 0, t_idx='test', step=200)
 
 
@@ -320,10 +322,10 @@ if __name__ == '__main__':
     data = add_ts(data, nts, 2)     # add hour
     data = add_ts(data, nts, 3)     # add day of week
     name = '%sTar%d_w%dp%d' % ('Solar' if 'resultsSolar.csv' in data_file_name else 'Wind', target, w, pred)
-    if False:
+    if True:
         print('=== No ANN ===')
         model_no_ann('%s_noANN' % name, data, idx, t_pos[target])
-    if True:
+    if False:
         print('=== ANN ===')
         trained = '%s_tobespecified' % name
         train_model(w, pred, trained, data, idx, t_pos[target],
