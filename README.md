@@ -4,6 +4,6 @@
 
 Predicting energy consumption using A linear regression and a Neural Network, and comparing the two.
 
-- TP_2_TimeSeries_preprocess.py : data-preprocessing script, not modified.
-- TP_2_TimeSeries-tbc.py : SVR & ANN for reconstruction task.
-- [nom_du_fichier] : ANN for prediction task.
+- **TP_2_TimeSeries_preprocess.py** : data-preprocessing script, not modified.
+- **TP_2_TimeSeries-tbc.py** : SVR & ANN for reconstruction task.
+- **[nom_du_fichier]** : ANN for prediction task.
