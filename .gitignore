@@ -1,8 +1,3 @@
 models/
 __pycache__/
-rapport/rapport.fls
-rapport/rapport.aux
-rapport/rapport.fdb_latexmk
-rapport/rapport.log
-rapport/rapport.pyg
-rapport/rapport.synctex.gz
+report.md
