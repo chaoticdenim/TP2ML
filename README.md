@@ -11,4 +11,4 @@ The objective of this practical work was to propose machine learning models on t
 
 Both of these tasks were done on two different features: 'System power generated (kW)' and 'Electricity load (year 1) (kW)'.
 
-A complete report is available (in French) at report/report.pdf
+A complete report is available (in French) at [I'm an inline-style link](/tree/master/report/report.pdf)
